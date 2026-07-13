@@ -23,17 +23,17 @@ display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
-padding:20px;
+padding:16px;
 }
 
 .card{
 
 width:100%;
-max-width:700px;
+max-width:360px;
 
-padding:30px;
+padding:20px;
 
-border-radius:24px;
+border-radius:18px;
 
 background:rgba(255,255,255,.78);
 
@@ -41,17 +41,17 @@ backdrop-filter:blur(16px);
 
 border:1px solid rgba(255,255,255,.65);
 
-box-shadow:0 10px 30px rgba(0,0,0,.08);
+box-shadow:0 8px 24px rgba(0,0,0,.08);
 
 }
 
 .greeting{
 
-font-size:34px;
+font-size:18px;
 
 font-weight:700;
 
-margin-bottom:8px;
+margin-bottom:6px;
 
 transition:.3s;
 
@@ -59,7 +59,7 @@ transition:.3s;
 
 .time{
 
-font-size:56px;
+font-size:32px;
 
 font-weight:700;
 
@@ -67,25 +67,25 @@ color:#2b2b2b;
 
 line-height:1;
 
-margin-bottom:10px;
+margin-bottom:8px;
 
 }
 
 .date{
 
-font-size:16px;
+font-size:12px;
 
 color:#888;
 
-margin-bottom:24px;
+margin-bottom:18px;
 
 }
 
 .quote{
 
-font-size:20px;
+font-size:13px;
 
-line-height:1.7;
+line-height:1.6;
 
 color:#444;
 
@@ -129,9 +129,15 @@ greeting = "☀️ Good Afternoon";
 
 }
 
+else if(hour < 21){
+
+greeting = "🌆 Good Evening";
+
+}
+
 else{
 
-greeting = "🌙 Good Evening";
+greeting = "🌙 Good Night";
 
 }
 
