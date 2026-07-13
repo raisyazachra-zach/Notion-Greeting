@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<title>Notion Greeting</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Inter,sans-serif;
+background:transparent;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+padding:16px;
+}
+
+.card{
+width:100%;
+max-width:650px;
+padding:24px;
+border-radius:20px;
+
+background:rgba(255,255,255,.75);
+backdrop-filter:blur(14px);
+
+border:1px solid rgba(255,255,255,.6);
+
+box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
+
+.greeting{
+font-size:34px;
+font-weight:700;
+margin-bottom:10px;
+transition:.3s;
+}
+
+.date{
+font-size:16px;
+color:#7a7a7a;
+margin-bottom:22px;
+}
+
+.quote{
+font-size:20px;
+line-height:1.7;
+color:#444;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="greeting" id="greeting"></div>
+
+<div class="date" id="date"></div>
+
+<div class="quote" id="quote"></div>
+
+</div>
+
+<script>
+
+const hour = new Date().getHours();
+
+let greeting = "";
+
+if(hour < 12){
+    greeting = "🌞 Good Morning";
+}
+else if(hour < 18){
+    greeting = "☀️ Good Afternoon";
+}
+else{
+    greeting = "🌙 Good Evening";
+}
+
+document.getElementById("greeting").textContent = greeting;
+
+// Greeting color
+const greetingEl = document.getElementById("greeting");
+
+if(hour < 12){
+    greetingEl.style.color = "#F4B400";
+}
+else if(hour < 18){
+    greetingEl.style.color = "#FF8A65";
+}
+else if(hour < 21){
+    greetingEl.style.color = "#F06292";
+}
+else{
+    greetingEl.style.color = "#8E7CC3";
+}
+
+// Date
+const options = {
+weekday:"long",
+month:"long",
+day:"numeric",
+year:"numeric"
+};
+
+document.getElementById("date").textContent =
+new Date().toLocaleDateString("en-US", options);
+
+// Daily Quotes
+const quotes = [
+"🌸 Tiny progress is still progress.",
+"☕ Nothing's Gonna Hurt You.",
+"📖 Read one more page today.",
+"🎨 Make something only you can make.",
+"🌷 Rest is productive too.",
+"💛 Don't rush your own timeline.",
+"✨ You don't need permission to begin.",
+"🪴 Water yourself before watering others.",
+"🌼 Your ideas deserve to exist.",
+"🌈 Vienna Is Waiting for You.",
+"🎵 Put on your favorite playlist and begin.",
+"📚 Learn one new thing today.",
+"💌 Your future self will thank you.",
+"🍀 Small habits become big changes.",
+"👑 Slow Down, You're Doing Fine.",
+"🌙 Fake it till you make it.",
+"🌳 You're On Your Own, Kid. You Always Have Been.",
+"💕 Keep Going With Your Silly Dreams.",
+"🧚 Promise To Be Dazzling."
+];
+
+const day = new Date().getDate();
+
+document.getElementById("quote").textContent =
+quotes[(day - 1) % quotes.length];
+
+</script>
+
+</body>
+</html>
