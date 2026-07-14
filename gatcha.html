@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Bloom Gacha</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Fredoka',sans-serif;
+}
+
+body{
+
+background:#CFDD9D;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+min-height:100vh;
+
+padding:40px;
+
+}
+
+.container{
+
+width:420px;
+
+text-align:center;
+
+}
+
+h1{
+
+font-size:42px;
+
+color:#55704c;
+
+margin-bottom:10px;
+
+}
+
+.subtitle{
+
+color:#6b7d64;
+
+margin-bottom:30px;
+
+}
+
+/* ======================= */
+
+.machine{
+
+position:relative;
+
+width:320px;
+height:470px;
+
+margin:auto;
+
+}
+
+/* machine body */
+
+.machine-body{
+
+position:absolute;
+
+bottom:0;
+
+width:100%;
+height:300px;
+
+background:#F8F5ED;
+
+border-radius:28px;
+
+border:8px solid #BFD88E;
+
+box-shadow:
+
+0 15px 30px rgba(0,0,0,.08),
+
+inset 0 6px rgba(255,255,255,.8);
+
+}
+
+/* glass */
+
+.glass{
+
+position:absolute;
+
+left:50%;
+
+transform:translateX(-50%);
+
+width:220px;
+height:220px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.5);
+
+border:10px solid white;
+
+overflow:hidden;
+
+backdrop-filter:blur(5px);
+
+box-shadow:
+
+0 8px 20px rgba(0,0,0,.08),
+
+inset 0 5px rgba(255,255,255,.8);
+
+}
+
+/* shine */
+
+.glass:before{
+
+content:"";
+
+position:absolute;
+
+left:22px;
+top:22px;
+
+width:40px;
+height:120px;
+
+background:rgba(255,255,255,.45);
+
+border-radius:40px;
+
+transform:rotate(-18deg);
+
+}
+
+/* ================= */
+
+.capsules{
+
+position:absolute;
+
+inset:0;
+
+display:flex;
+
+flex-wrap:wrap;
+
+justify-content:center;
+
+align-content:center;
+
+gap:14px;
+
+padding:25px;
+
+}
+
+.ball{
+
+width:44px;
+height:44px;
+
+border-radius:50%;
+
+animation:float 4s ease-in-out infinite;
+
+box-shadow:
+
+inset -4px -5px rgba(0,0,0,.08),
+
+0 5px 10px rgba(0,0,0,.06);
+
+position:relative;
+
+}
+
+.ball:after{
+
+content:"";
+
+position:absolute;
+
+width:100%;
+height:3px;
+
+background:white;
+
+top:50%;
+
+transform:translateY(-50%);
+
+}
+
+.ball:nth-child(2){animation-delay:.5s;}
+.ball:nth-child(3){animation-delay:1s;}
+.ball:nth-child(4){animation-delay:1.5s;}
+.ball:nth-child(5){animation-delay:2s;}
+.ball:nth-child(6){animation-delay:2.5s;}
+
+.pink{
+
+background:#F5BFD0;
+
+}
+
+.green{
+
+background:#AED39C;
+
+}
+
+.yellow{
+
+background:#F8DB84;
+
+}
+
+.cream{
+
+background:#F7F1D7;
+
+}
+
+/* ================= */
+
+.slot{
+
+position:absolute;
+
+bottom:120px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+width:110px;
+height:18px;
+
+background:#8d8d8d;
+
+border-radius:20px;
+
+box-shadow:inset 0 4px rgba(0,0,0,.25);
+
+z-index:20;
+
+}
+
+/* ================= */
+
+.handle{
+
+position:absolute;
+
+right:-26px;
+
+top:240px;
+
+width:80px;
+height:10px;
+
+background:#C99A59;
+
+border-radius:20px;
+
+transform-origin:left center;
+
+transition:.6s;
+
+}
+
+.handle.active{
+
+transform:rotate(45deg);
+
+}
+
+.knob{
+
+position:absolute;
+
+right:-15px;
+
+top:-12px;
+
+width:34px;
+height:34px;
+
+background:#F4AFC3;
+
+border-radius:50%;
+
+}
+
+/* ================= */
+
+.output{
+
+position:absolute;
+
+left:50%;
+
+bottom:90px;
+
+transform:translateX(-50%);
+
+z-index:50;
+
+}
+
+.capsule{
+
+width:64px;
+height:64px;
+
+display:none;
+
+cursor:pointer;
+
+position:relative;
+
+}
+
+.capsule.show{
+
+display:block;
+
+animation:drop .8s;
+
+}
+
+.top{
+
+width:64px;
+height:32px;
+
+background:#F5BFD0;
+
+border-radius:40px 40px 0 0;
+
+transition:.4s;
+
+}
+
+.bottom{
+
+width:64px;
+height:32px;
+
+background:#FFE98D;
+
+border-radius:0 0 40px 40px;
+
+transition:.4s;
+
+}
+
+.capsule.open .top{
+
+transform:
+
+translateY(-18px)
+
+rotate(-20deg);
+
+}
+
+.capsule.open .bottom{
+
+transform:
+
+translateY(18px)
+
+rotate(20deg);
+
+}
+
+button{
+
+margin-top:40px;
+
+padding:15px 40px;
+
+border:none;
+
+border-radius:999px;
+
+background:#F5BFD0;
+
+cursor:pointer;
+
+font-size:18px;
+
+transition:.25s;
+
+}
+
+button:hover{
+
+transform:translateY(-2px);
+
+}
+
+button:disabled{
+
+opacity:.5;
+
+cursor:not-allowed;
+
+}
+
+.stats{
+
+display:flex;
+
+justify-content:space-between;
+
+margin-top:20px;
+
+font-size:18px;
+
+color:#5c6657;
+
+}
+
+.card{
+
+display:none;
+
+margin-top:30px;
+
+background:white;
+
+padding:24px;
+
+border-radius:22px;
+
+box-shadow:0 12px 25px rgba(0,0,0,.08);
+
+}
+
+.card.show{
+
+display:block;
+
+animation:popup .5s;
+
+}
+
+.rarity{
+
+font-size:24px;
+
+margin-bottom:10px;
+
+}
+
+.category{
+
+font-size:20px;
+
+margin-bottom:15px;
+
+color:#5a6f54;
+
+}
+
+.quest{
+
+line-height:1.6;
+
+color:#666;
+
+}
+
+@keyframes float{
+
+50%{
+
+transform:translateY(-8px);
+
+}
+
+}
+
+@keyframes drop{
+
+0%{
+
+opacity:0;
+
+transform:
+
+translateY(-80px)
+
+scale(.2);
+
+}
+
+70%{
+
+transform:
+
+translateY(8px);
+
+}
+
+100%{
+
+transform:
+
+translateY(0);
+
+}
+
+}
+
+@keyframes popup{
+
+from{
+
+opacity:0;
+
+transform:
+
+translateY(30px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:
+
+translateY(0);
+
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Bloom Gacha 🌼</h1>
+
+<p class="subtitle">
+Pull today's capsule and receive a cozy side quest.
+</p>
+
+<div class="machine">
+
+<div class="glass">
+
+<div class="capsules">
+
+<div class="ball pink"></div>
+<div class="ball green"></div>
+<div class="ball yellow"></div>
+<div class="ball cream"></div>
+<div class="ball pink"></div>
+<div class="ball green"></div>
+
+</div>
+
+</div>
+
+<div class="machine-body"></div>
+
+<div class="slot"></div>
+
+<div class="output">
+
+<div class="capsule" id="capsule">
+
+<div class="top"></div>
+<div class="bottom"></div>
+
+</div>
+
+</div>
+
+<div class="handle" id="handle">
+
+<div class="knob"></div>
+
+</div>
+
+</div>
+
+<button id="rollBtn">
+
+🎲 Pull Handle
+
+</button>
+
+<div class="stats">
+
+<div>
+
+🌼 <span id="petals">0</span>
+
+</div>
+
+<div id="today">
+
+Ready
+
+</div>
+
+</div>
+
+<div class="card" id="card">
+
+<div class="rarity" id="rarity"></div>
+
+<div class="category" id="category"></div>
+
+<div class="quest" id="quest"></div>
+
+</div>
+
+</div>
+
+<script>
+
+const quests=[
+
+{
+rarity:"🌿 Common",
+color:"#6F9C5B",
+category:"Cozy Quest",
+text:"Drink your favorite beverage without looking at your phone."
+},
+
+{
+rarity:"🌿 Common",
+color:"#6F9C5B",
+category:"Nature Quest",
+text:"Open your window for five minutes."
+},
+
+{
+rarity:"🌿 Common",
+color:"#6F9C5B",
+category:"Reset Quest",
+text:"Rescue one corner of your room."
+},
+
+{
+rarity:"🌸 Rare",
+color:"#E7A2B9",
+category:"Adventure Quest",
+text:"Watch today's sunset."
+},
+
+{
+rarity:"🌸 Rare",
+color:"#E7A2B9",
+category:"Walk Quest",
+text:"Take a 15 minute walk without headphones."
+},
+
+{
+rarity:"✨ Epic",
+color:"#A47CE4",
+category:"Creative Quest",
+text:"Draw anything in under five minutes."
+},
+
+{
+rarity:"✨ Epic",
+color:"#A47CE4",
+category:"Book Quest",
+text:"Visit a bookstore today."
+},
+
+{
+rarity:"🌈 Legendary",
+color:"#F4B400",
+category:"Lucky Quest",
+text:"Buy yourself flowers today."
+}
+
+];
+
+const rollBtn=document.getElementById("rollBtn");
+
+const capsule=document.getElementById("capsule");
+
+const handle=document.getElementById("handle");
+
+const card=document.getElementById("card");
+
+const petals=document.getElementById("petals");
+
+const rarity=document.getElementById("rarity");
+
+const category=document.getElementById("category");
+
+const quest=document.getElementById("quest");
+
+const today=document.getElementById("today");
+
+let petalCount=
+
+Number(localStorage.getItem("petals"))||0;
+
+petals.innerHTML=petalCount;
+
+const date=
+
+new Date().toDateString();
+
+if(localStorage.getItem("opened")==date){
+
+rollBtn.disabled=true;
+
+today.innerHTML="Opened 🌼";
+
+}
+
+rollBtn.onclick=()=>{
+
+handle.classList.add("active");
+
+setTimeout(()=>{
+
+handle.classList.remove("active");
+
+capsule.classList.add("show");
+
+},600);
+
+}
+
+capsule.onclick=()=>{
+
+capsule.classList.add("open");
+
+setTimeout(showQuest,500);
+
+}
+function showQuest(){
+
+const random=
+quests[Math.floor(Math.random()*quests.length)];
+
+rarity.innerHTML=random.rarity;
+rarity.style.color=random.color;
+
+category.innerHTML=random.category;
+
+quest.innerHTML=random.text;
+
+card.classList.add("show");
+
+petalCount+=10;
+
+petals.innerHTML=petalCount;
+
+localStorage.setItem(
+"petals",
+petalCount
+);
+
+localStorage.setItem(
+"opened",
+date
+);
+
+today.innerHTML="Opened 🌼";
+
+rollBtn.disabled=true;
+
+flowerBurst();
+
+}
+
+function flowerBurst(){
+
+for(let i=0;i<20;i++){
+
+const flower=document.createElement("div");
+
+flower.innerHTML=
+Math.random()>.5?"🌼":"🌸";
+
+flower.style.position="fixed";
+
+flower.style.left=
+Math.random()*window.innerWidth+"px";
+
+flower.style.top="-30px";
+
+flower.style.fontSize=
+16+Math.random()*14+"px";
+
+flower.style.pointerEvents="none";
+
+flower.style.transition="3s linear";
+
+flower.style.zIndex="999";
+
+document.body.appendChild(flower);
+
+setTimeout(()=>{
+
+flower.style.transform=
+`translateY(${window.innerHeight+150}px)
+rotate(${Math.random()*720}deg)`;
+
+flower.style.opacity=0;
+
+},50);
+
+setTimeout(()=>{
+
+flower.remove();
+
+},3000);
+
+}
+
+}
+</script>
+
+</body>
+
+</html>
