@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Daily Bloom</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+
+}
+
+body{
+
+background:transparent;
+
+display:flex;
+justify-content:center;
+
+padding:14px;
+
+}
+
+.widget{
+
+width:100%;
+max-width:470px;
+
+background:#CFDD9D;
+
+border:1px solid rgba(255,248,238,.45);
+
+border-radius:24px;
+
+padding:26px;
+
+}
+
+h2{
+
+text-align:center;
+
+font-size:24px;
+
+font-weight:700;
+
+color:#FFF8EE;
+
+margin-bottom:8px;
+
+}
+
+.subtitle{
+
+text-align:center;
+
+font-size:13px;
+
+color:rgba(255,248,238,.8);
+
+margin-bottom:22px;
+
+}
+
+.flowers{
+
+display:flex;
+
+justify-content:space-between;
+
+gap:8px;
+
+margin-bottom:20px;
+
+}
+
+.flower{
+
+width:58px;
+height:58px;
+
+background:white;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+align-items:center;
+
+font-size:30px;
+
+cursor:pointer;
+
+transition:.25s;
+
+border:2px solid transparent;
+
+user-select:none;
+
+}
+
+.flower:hover{
+
+transform:translateY(-4px);
+
+}
+
+.flower.active{
+
+background:#FFF8EE;
+
+border-color:#447A5F;
+
+transform:scale(1.08);
+
+}
+
+#mood{
+
+text-align:center;
+
+font-size:18px;
+
+font-weight:700;
+
+color:#FFF8EE;
+
+margin-bottom:18px;
+
+}
+
+.divider{
+
+height:1px;
+
+background:rgba(255,248,238,.35);
+
+margin:18px 0;
+
+}
+
+.prompt{
+
+color:#FFF8EE;
+
+font-weight:600;
+
+margin-bottom:10px;
+
+}
+
+.noteWrap{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+textarea{
+
+width:100%;
+
+height:120px;
+
+padding:15px;
+
+border:none;
+
+outline:none;
+
+resize:none;
+
+border-radius:14px;
+
+background:#FFF8EE;
+
+font-size:14px;
+
+line-height:1.6;
+
+color:#555;
+
+}
+
+textarea::placeholder{
+
+color:#A7A7A7;
+
+}
+
+#cloud{
+
+position:absolute;
+
+left:50%;
+top:45%;
+
+transform:translate(-50%,-50%);
+
+font-size:42px;
+
+opacity:0;
+
+pointer-events:none;
+
+}
+
+.fly{
+
+animation:fly 2s ease forwards;
+
+}
+
+@keyframes fly{
+
+0%{
+
+opacity:0;
+
+transform:translate(-50%,25px) scale(.8);
+
+}
+
+30%{
+
+opacity:1;
+
+}
+
+100%{
+
+opacity:0;
+
+transform:translate(-50%,-140px) scale(1.3);
+
+}
+
+}
+
+.fade{
+
+animation:fadeOut .8s forwards;
+
+}
+
+@keyframes fadeOut{
+
+to{
+
+opacity:0;
+
+transform:translateY(-10px);
+
+}
+
+}
+
+#message{
+
+margin-top:16px;
+
+text-align:center;
+
+color:#FFF8EE;
+
+font-size:14px;
+
+font-style:italic;
+
+opacity:0;
+
+transition:.4s;
+
+}
+
+.show{
+
+opacity:1;
+
+}
+
+.footer{
+
+margin-top:12px;
+
+text-align:center;
+
+font-size:12px;
+
+color:rgba(255,248,238,.75);
+
+font-style:italic;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="widget">
+
+<h2>
+
+How are you feeling today?
+
+</h2>
+
+<div class="subtitle">
+
+Choose the bloom that feels like you.
+
+</div>
+
+<div class="flowers">
+
+<div class="flower" data-mood="🌱 Rooting">
+
+🌱
+
+</div>
+
+<div class="flower" data-mood="🌿 Growing">
+
+🌿
+
+</div>
+
+<div class="flower" data-mood="🌼 Blooming">
+
+🌼
+
+</div>
+
+<div class="flower" data-mood="🌸 Flourishing">
+
+🌸
+
+</div>
+
+<div class="flower" data-mood="🌺 Radiant">
+
+🌺
+
+</div>
+
+</div>
+
+<div id="mood">
+
+Choose today's bloom
+
+</div>
+
+<div class="divider"></div>
+
+<div class="prompt">
+
+What helped you bloom today?
+
+</div>
+
+<div class="noteWrap">
+
+<textarea
+id="note"
+placeholder="Write one or two gentle sentences...&#10;&#10;Press Enter to let it go ☁️"></textarea>
+
+<div id="cloud">
+
+☁️
+
+</div>
+
+</div>
+
+<div id="message"></div>
+
+<div class="footer">
+
+☾ Fill this in at the end of the day.
+
+</div>
+
+</div>
+<script>
+
+const flowers = document.querySelectorAll(".flower");
+const mood = document.getElementById("mood");
+const note = document.getElementById("note");
+const cloud = document.getElementById("cloud");
+const message = document.getElementById("message");
+
+const messages = [
+
+"☁️ Your thoughts are safe with the sky.",
+
+"🌙 Rest well. Tomorrow is another bloom.",
+
+"🌷 Thank you for sharing today.",
+
+"✨ Some thoughts are meant to become clouds.",
+
+"🌿 Let today stay with the clouds."
+
+];
+
+const savedMood = localStorage.getItem("dailyBloomMood");
+
+if(savedMood){
+
+flowers.forEach(f=>{
+
+if(f.dataset.mood===savedMood){
+
+f.classList.add("active");
+
+mood.textContent=savedMood;
+
+}
+
+});
+
+}
+
+flowers.forEach(f=>{
+
+f.addEventListener("click",()=>{
+
+flowers.forEach(x=>x.classList.remove("active"));
+
+f.classList.add("active");
+
+mood.textContent=f.dataset.mood;
+
+localStorage.setItem(
+
+"dailyBloomMood",
+
+f.dataset.mood
+
+);
+
+});
+
+});
+
+note.addEventListener("keydown",(e)=>{
+
+if(e.key==="Enter" && !e.shiftKey){
+
+e.preventDefault();
+
+if(note.value.trim()==="") return;
+
+note.classList.add("fade");
+
+cloud.classList.add("fly");
+
+message.textContent=
+
+messages[Math.floor(Math.random()*messages.length)];
+
+setTimeout(()=>{
+
+note.value="";
+
+note.classList.remove("fade");
+
+cloud.classList.remove("fly");
+
+message.classList.add("show");
+
+},1000);
+
+setTimeout(()=>{
+
+message.classList.remove("show");
+
+note.focus();
+
+},3200);
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
