@@ -18,16 +18,18 @@ font-family:'Inter',sans-serif;
 body{
 background:transparent;
 padding:12px;
+min-height:100vh;
 }
 
 .widget{
 width:100%;
-max-width:1100px;
+max-width:1400px;
+min-height:150px;
 margin:auto;
 background:#fff;
 border:1px solid #F8CAE4;
 border-radius:24px;
-padding:24px 32px;
+padding:20px 32px;
 display:grid;
 grid-template-columns:1fr auto 1fr;
 align-items:center;
@@ -77,10 +79,10 @@ color:#9A9A9A;
 }
 
 .clock{
-font-size:72px;
+font-size:36px;
 font-weight:700;
 color:#832D51;
-letter-spacing:-2px;
+letter-spacing:-1px;
 line-height:1;
 }
 
@@ -97,6 +99,7 @@ line-height:1.5;
 grid-template-columns:1fr;
 row-gap:18px;
 text-align:center;
+min-height:auto;
 }
 
 .right{
@@ -108,7 +111,7 @@ display:none;
 }
 
 .clock{
-font-size:52px;
+font-size:26px;
 }
 
 .greeting{
@@ -225,6 +228,7 @@ const quotes = [
 "Keep chasing the version of you you've imagined."
 
 ];
+
 document.getElementById("quote").textContent=
 "❝ "+quotes[now.getDate()%quotes.length];
 
