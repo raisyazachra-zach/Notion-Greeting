@@ -4,9 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-<title>Creative Greeting Widget</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -14,263 +12,223 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
+font-family:'Inter',sans-serif;
 }
 
 body{
-font-family:Inter,sans-serif;
 background:transparent;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-padding:16px;
+padding:12px;
 }
 
-.card{
-
+.widget{
 width:100%;
-max-width:360px;
+max-width:1100px;
+margin:auto;
+background:#fff;
+border:1px solid #F8CAE4;
+border-radius:24px;
+padding:24px 32px;
+display:grid;
+grid-template-columns:1fr auto 1fr;
+align-items:center;
+column-gap:32px;
+box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
 
-padding:20px;
+.section{
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
 
-border-radius:18px;
+.center{
+text-align:center;
+}
 
-background:rgba(255,255,255,.78);
+.right{
+text-align:right;
+}
 
-backdrop-filter:blur(16px);
+.divider{
+position:relative;
+}
 
-border:1px solid rgba(255,255,255,.65);
-
-box-shadow:0 8px 24px rgba(0,0,0,.08);
-
+.divider::after{
+content:"";
+position:absolute;
+right:-16px;
+top:50%;
+transform:translateY(-50%);
+width:1px;
+height:58px;
+background:#F3D8E5;
 }
 
 .greeting{
-
-font-size:18px;
-
+font-size:28px;
 font-weight:700;
-
+color:#447A5F;
 margin-bottom:6px;
-
-transition:.3s;
-
-}
-
-.time{
-
-font-size:32px;
-
-font-weight:700;
-
-color:#2b2b2b;
-
-line-height:1;
-
-margin-bottom:8px;
-
 }
 
 .date{
+font-size:15px;
+color:#9A9A9A;
+}
 
-font-size:12px;
-
-color:#888;
-
-margin-bottom:18px;
-
+.clock{
+font-size:72px;
+font-weight:700;
+color:#832D51;
+letter-spacing:-2px;
+line-height:1;
 }
 
 .quote{
+font-size:18px;
+font-weight:500;
+color:#555;
+line-height:1.5;
+}
 
-font-size:13px;
+@media(max-width:850px){
 
-line-height:1.6;
+.widget{
+grid-template-columns:1fr;
+row-gap:18px;
+text-align:center;
+}
 
-color:#444;
+.right{
+text-align:center;
+}
+
+.divider::after{
+display:none;
+}
+
+.clock{
+font-size:52px;
+}
+
+.greeting{
+font-size:24px;
+}
 
 }
 
 </style>
-
 </head>
 
 <body>
 
-<div class="card">
+<div class="widget">
 
+<div class="section divider">
 <div class="greeting" id="greeting"></div>
-
-<div class="time" id="time"></div>
-
 <div class="date" id="date"></div>
+</div>
 
+<div class="section center divider">
+<div class="clock" id="time"></div>
+</div>
+
+<div class="section right">
 <div class="quote" id="quote"></div>
+</div>
 
 </div>
 
 <script>
 
-// Greeting
+const now=new Date();
+const hour=now.getHours();
 
-const hour = new Date().getHours();
+let greeting="";
 
-let greeting = "";
-
-if(hour < 12){
-
-greeting = "🌞 Good Morning";
-
+if(hour<12){
+greeting="Good Morning";
 }
-
-else if(hour < 18){
-
-greeting = "☀️ Good Afternoon";
-
+else if(hour<18){
+greeting="Good Afternoon";
 }
-
-else if(hour < 21){
-
-greeting = "🌆 Good Evening";
-
+else if(hour<22){
+greeting="Good Evening";
 }
-
 else{
-
-greeting = "🌙 Good Night";
-
+greeting="Good Night";
 }
 
-document.getElementById("greeting").textContent = greeting;
+document.getElementById("greeting").textContent=greeting;
 
-
-// Greeting Color
-
-const greetingEl = document.getElementById("greeting");
-
-if(hour < 12){
-
-greetingEl.style.color="#F4B400";
-
-}
-
-else if(hour < 18){
-
-greetingEl.style.color="#FF8A65";
-
-}
-
-else if(hour < 21){
-
-greetingEl.style.color="#F06292";
-
-}
-
-else{
-
-greetingEl.style.color="#8E7CC3";
-
-}
-
-
-// Clock
-
-function updateClock(){
-
-const now = new Date();
-
-const time = now.toLocaleTimeString("en-US",{
-
-hour:"2-digit",
-
-minute:"2-digit",
-
-second:"2-digit",
-
-hour12:false
-
+document.getElementById("date").textContent=
+now.toLocaleDateString("en-US",{
+weekday:"long",
+month:"long",
+day:"numeric",
+year:"numeric"
 });
 
-document.getElementById("time").textContent=time;
+function updateClock(){
+const n=new Date();
 
+document.getElementById("time").textContent=
+n.toLocaleTimeString("en-GB",{
+hour:"2-digit",
+minute:"2-digit",
+second:"2-digit",
+hour12:false
+});
 }
 
 updateClock();
-
 setInterval(updateClock,1000);
 
+const quotes = [
 
-// Date
+"You're allowed to bloom at your own pace.",
 
-const options={
+"The bravest thing you can do is keep dreaming.",
 
-weekday:"long",
+"Some days are for growing quietly.",
 
-month:"long",
+"Become the person your younger self needed.",
 
-day:"numeric",
+"The world feels bigger when you're hopeful.",
 
-year:"numeric"
+"You don't have to have everything figured out.",
 
-};
+"Collect memories, not pressure.",
 
-document.getElementById("date").textContent=
+"Nothing beautiful blooms overnight.",
 
-new Date().toLocaleDateString("en-US",options);
+"Keep choosing wonder over fear.",
 
+"Your story is still unfolding.",
 
-// Quotes
+"You're becoming someone you'll be proud of.",
 
-const quotes=[
+"There is magic in ordinary days.",
 
-"🌸 Tiny progress is still progress.",
+"One day you'll thank yourself for not giving up.",
 
-"☕ Nothing's Gonna Hurt You.",
+"Romanticize the little moments.",
 
-"📖 Read one more page today.",
+"You are growing even when it feels slow.",
 
-"🎨 Make something only you can make.",
+"The future belongs to those who keep creating.",
 
-"🌷 Rest is productive too.",
+"Take your time. You'll get there.",
 
-"💛 Don't rush your own timeline.",
+"You're writing a life worth remembering.",
 
-"✨ You don't need permission to begin.",
-
-"🪴 Water yourself before watering others.",
-
-"🌼 Your ideas deserve to exist.",
-
-"🌈 Vienna Is Waiting for You.",
-
-"🎵 Put on your favorite playlist and begin.",
-
-"📚 Learn one new thing today.",
-
-"💌 Your future self will thank you.",
-
-"🍀 Small habits become big changes.",
-
-"👑 Slow Down, You're Doing Fine.",
-
-"🌙 Fake it till you make it.",
-
-"🌳 You're On Your Own, Kid. You Always Have Been.",
-
-"💕 Keep Going With Your Silly Dreams.",
-
-"🧚 Promise To Be Dazzling."
+"Keep chasing the version of you you've imagined."
 
 ];
-
-const day=new Date().getDate();
-
 document.getElementById("quote").textContent=
-
-quotes[(day-1)%quotes.length];
+"❝ "+quotes[now.getDate()%quotes.length];
 
 </script>
 
 </body>
-
 </html>
