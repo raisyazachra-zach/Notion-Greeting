@@ -3,287 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Inter,sans-serif;
-}
-
-body{
-background:transparent;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-padding:16px;
-}
-
-.note{
-
-width:320px;
-background:#447A5F;
-border-radius:22px;
-padding:22px;
-box-shadow:0 8px 24px rgba(0,0,0,.08);
-position:relative;
-transition:.35s;
-
-}
-
-.pin{
-
-position:absolute;
-top:-12px;
-left:50%;
-transform:translateX(-50%);
-font-size:24px;
-
-}
-
-h2{
-
-font-size:18px;
-margin-bottom:18px;
-color:#444;
-
-}
-
-.task{
-
-display:flex;
-align-items:center;
-gap:10px;
-margin-bottom:12px;
-transition:.3s;
-
-}
-
-.task.done{
-
-opacity:.6;
-transform:translateX(5px);
-
-}
-
-.task.done input[type="text"]{
-
-text-decoration:line-through;
-color:#999;
-
-}
-
-input[type="checkbox"]{
-
-width:18px;
-height:18px;
-accent-color:#E58DB4;
-cursor:pointer;
-transition:.25s;
-
-}
-
-input[type="checkbox"]:checked{
-
-transform:scale(1.25);
-
-}
-
-input[type="text"]{
-
-flex:1;
-border:none;
-background:transparent;
-outline:none;
-font-size:14px;
-color:#444;
-
-}
-
-input[type="text"]::placeholder{
-
-color:#999;
-
-}
-
-.footer{
-
-margin-top:18px;
-font-size:12px;
-text-align:center;
-color:#888;
-
-}
-
-.sparkle{
-
-position:fixed;
-font-size:20px;
-pointer-events:none;
-animation:sparkle .8s ease forwards;
-
-}
-
-@keyframes sparkle{
-
-0%{
-opacity:0;
-transform:translateY(10px) scale(.3);
-}
-
-40%{
-opacity:1;
-}
-
-100%{
-opacity:0;
-transform:translateY(-30px) scale(1.6);
-}
-
-}
-
-.note.pop{
-
-animation:pop .35s;
-
-}
-
-@keyframes pop{
-
-0%{
-transform:scale(.97);
-}
-
-50%{
-transform:scale(1.03);
-}
-
-100%{
-transform:scale(1);
-}
-
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+body{background:transparent;display:flex;justify-content:center;align-items:center;height:100vh;padding:20px;overflow:hidden}
+.note{width:330px;background:#447A5F;border-radius:24px;padding:24px;position:relative;border:1px solid rgba(255,255,255,.15);box-shadow:0 10px 30px rgba(68,122,95,.25),0 2px 8px rgba(0,0,0,.08);transition:.35s}
+.pin{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:32px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-5px)}}
+h2{color:#fff;font-size:20px;margin-bottom:18px}
+.task{display:flex;align-items:center;gap:10px;margin-bottom:12px;transition:.3s}
+.task.done{opacity:.65;transform:translateX(5px)}
+.task.done input[type=text]{text-decoration:line-through;color:rgba(255,255,255,.6)}
+input[type=checkbox]{width:18px;height:18px;accent-color:#fff;cursor:pointer;transition:.25s}
+input[type=checkbox]:checked{transform:scale(1.25)}
+input[type=text]{flex:1;background:transparent;border:none;outline:none;color:#fff;font-size:14px}
+input[type=text]::placeholder{color:rgba(255,255,255,.7)}
+.note.pop{animation:pop .35s}
+@keyframes pop{0%{transform:scale(.97)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+.sparkle,.petal{position:fixed;pointer-events:none}
+.sparkle{font-size:20px;animation:spark .8s forwards}
+@keyframes spark{0%{opacity:0;transform:translateY(8px) scale(.3)}40%{opacity:1}100%{opacity:0;transform:translateY(-30px) scale(1.5)}}
+.petal{font-size:18px;animation:fall 2.2s linear forwards}
+@keyframes fall{from{opacity:1;transform:translateY(-20px) rotate(0)}to{opacity:0;transform:translateY(220px) rotate(360deg)}}
 </style>
-
 </head>
-
 <body>
-
 <div class="note">
-
-<div class="pin">📌</div>
-
+<div class="pin">🍀</div>
 <h2>Today's Focus</h2>
-
 <div id="tasks"></div>
-
-<div class="footer">
-♡ one thing at a time
 </div>
-
-</div>
-
 <script>
-
-const container=document.getElementById("tasks");
-
+const box=document.getElementById("tasks");
 let saved=JSON.parse(localStorage.getItem("focus"))||[
 {text:"Finish report",done:false},
 {text:"Read 20 pages",done:false},
 {text:"Draw for 30 mins",done:false}
 ];
-
-function save(){
-
-localStorage.setItem("focus",JSON.stringify(saved));
-
-}
-
+function save(){localStorage.setItem("focus",JSON.stringify(saved))}
+function petals(){for(let i=0;i<8;i++){let p=document.createElement("div");p.className="petal";p.textContent="🌸";p.style.left=Math.random()*innerWidth+"px";p.style.top="-20px";document.body.appendChild(p);setTimeout(()=>p.remove(),2200)}}
 function render(){
-
-container.innerHTML="";
-
-saved.forEach((task,index)=>{
-
-const row=document.createElement("div");
-row.className="task";
-
-if(task.done){
-row.classList.add("done");
+box.innerHTML="";
+saved.forEach((t,i)=>{
+let row=document.createElement("div");row.className="task"+(t.done?" done":"");
+let c=document.createElement("input");c.type="checkbox";c.checked=t.done;
+let inp=document.createElement("input");inp.type="text";inp.value=t.text;
+inp.oninput=()=>{saved[i].text=inp.value;save();}
+c.onchange=()=>{
+saved[i].done=c.checked;
+row.classList.toggle("done",c.checked);
+if(c.checked){
+let r=c.getBoundingClientRect();
+let s=document.createElement("div");
+s.className="sparkle";s.textContent="✨";
+s.style.left=r.left+"px";s.style.top=r.top+"px";
+document.body.appendChild(s);
+setTimeout(()=>s.remove(),800);
+document.querySelector(".note").classList.add("pop");
+setTimeout(()=>document.querySelector(".note").classList.remove("pop"),350);
+petals();
 }
-
-const check=document.createElement("input");
-check.type="checkbox";
-check.checked=task.done;
-
-const text=document.createElement("input");
-text.type="text";
-text.value=task.text;
-text.placeholder="New task...";
-
-text.oninput=()=>{
-
-saved[index].text=text.value;
 save();
-
 };
-
-check.onchange=()=>{
-
-saved[index].done=check.checked;
-
-if(check.checked){
-
-row.classList.add("done");
-
-const rect=check.getBoundingClientRect();
-
-const sparkle=document.createElement("div");
-sparkle.className="sparkle";
-sparkle.textContent="✨";
-
-sparkle.style.left=(rect.left+window.scrollX)+"px";
-sparkle.style.top=(rect.top+window.scrollY-5)+"px";
-
-document.body.appendChild(sparkle);
-
-setTimeout(()=>sparkle.remove(),800);
-
-const note=document.querySelector(".note");
-note.classList.add("pop");
-
-setTimeout(()=>{
-note.classList.remove("pop");
-},350);
-
-}else{
-
-row.classList.remove("done");
-
-}
-
-save();
-
-};
-
-row.appendChild(check);
-row.appendChild(text);
-
-container.appendChild(row);
-
+row.append(c,inp);
+box.append(row);
 });
-
 }
-
 render();
-
 </script>
-
 </body>
 </html>
